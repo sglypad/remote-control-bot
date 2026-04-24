@@ -9,7 +9,7 @@ import os
 import datetime 
 from datetime import timedelta
 
-TOKEN = "8488676356:AAETzVx21qkc0TgUQ10o0M89gBg5hhvBwm0"
+TOKEN = "IMPORT TOKEN"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
@@ -17,17 +17,17 @@ router = Router()
 dp.include_router(router)
 def main_keyboard():
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="📈 Статус системы", callback_data="sys_monitor")],
-        [InlineKeyboardButton(text="🕒 Аптайм", callback_data="uptime")],
-        [InlineKeyboardButton(text="😴 Спать", callback_data="sleep")],
-        [InlineKeyboardButton(text="🔴 Выключить", callback_data="off")]
+        [InlineKeyboardButton(text="📈 System Status", callback_data="sys_monitor")],
+        [InlineKeyboardButton(text="🕒 Uptime", callback_data="uptime")],
+        [InlineKeyboardButton(text="😴 Sleep", callback_data="sleep")],
+        [InlineKeyboardButton(text="🔴 Turn Off", callback_data="off")]
     ])
     return keyboard
 
 # --- Команды (сообщения) ---
 @router.message(Command("start"))
 async def start(message: Message):
-    await message.answer("Привет! Я управляю твоим компом 🖥", reply_markup=main_keyboard())
+    await message.answer("Hello! I control your PC🖥", reply_markup=main_keyboard())
 
 @router.message(Command("status"))
 async def status(message: Message):
@@ -37,7 +37,7 @@ async def status(message: Message):
 
 @router.message(Command("off"))
 async def off(message: Message):
-    await message.answer("Выключаю комп... 🔌")
+    await message.answer("Turning off.... 🔌")
     # subprocess.run(["shutdown", "-h", "now"]) # Пока закомментил, чтоб случайно не выключил
 
 # --- Кнопки (колбэки) ---
@@ -64,12 +64,12 @@ async def uptime_callback(callback: CallbackQuery):
 
     uptime_str = str(uptime).split('.')[0]
 
-    await callback.message.answer(f"🕒 Время работы ПК: {uptime_str}")
+    await callback.message.answer(f"🕒 PC Uptime: {uptime_str}")
     await callback.answer()
 
 @router.callback_query(F.data == "sleep")
 async def sleep_callback(callback: CallbackQuery):
-    await callback.message.answer("Отправляю систему в ждущий режим... 😴")
+    await callback.message.answer("Going into sleep... 😴")
     await callback.answer
 
     subprocess.run(["systemctl", "suspend"])
@@ -91,11 +91,11 @@ async def off_callback(callback: CallbackQuery):
 
 # --- ЗАПУСК (самый низ файла) ---
 async def main():
-    print(">>> БОТ ЗАПУЩЕН! Напиши ему в телеге.")
+    print(">>> BOT IS WORKING! Type /start in telegram.")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("Бот выключен")
+        print("Bot is turned off.")
