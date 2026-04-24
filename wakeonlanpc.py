@@ -6,7 +6,8 @@ from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, C
 import asyncio
 import time
 import os
-import datetime 
+import datetime
+import mss
 from datetime import timedelta
 
 TOKEN = "IMPORT TOKEN"
@@ -21,6 +22,7 @@ def main_keyboard():
         [InlineKeyboardButton(text="🕒 Uptime", callback_data="uptime")],
         [InlineKeyboardButton(text="😴 Sleep", callback_data="sleep")],
         [InlineKeyboardButton(text="🔴 Turn Off", callback_data="off")]
+        [InlineKeyboardButton(text="📸 Screenshot", callback_data="screenshot")]
     ])
     return keyboard
 
@@ -73,6 +75,19 @@ async def sleep_callback(callback: CallbackQuery):
     await callback.answer
 
     subprocess.run(["systemctl", "suspend"])
+
+@router.callback_query(F.data == "screenshot")
+async def make_screenshot(callback: CallbackQuery):
+    try:
+        with mss.mss() as sct:
+            subprocess.run(["spectacle", "-b", "-n", "-o", "screenshot.png"])
+        
+        photo = FSInputFile("screenshot.png")
+        await callback.message.answer_photo(photo, caption="Whas on screen🖥")
+        await callback.answer()
+    except Exception as e:
+        await callback.message.answer(f"Ошибка Wayland!: {e}\Try install grim: sudo pacman -S grim")
+        await callback.answer()
 
 @router.callback_query(F.data == "off")
 async def off_callback(callback: CallbackQuery):
