@@ -51,7 +51,7 @@ async def monitor_callback(callback: CallbackQuery):
     
 
     text = (
-        f"📊 **Статус системы:**\n\n"
+        f"📊 **System status:**\n\n"
         f"📈 CPU: {cpu}%\n"
         f"🧠 RAM: {ram.percent}% {used_gb} ГБ / {total_gb} ГБ")
     await callback.message.answer(text) # type: ignore
