@@ -6,3 +6,6 @@ Bot now works with GUI buttons, and also have some classic commands,
 /off - to turn off PC
 
 Now only two buttons work in bot. Ill make some changes tomorrow
+
+
+!!!!! Made on CachyOS. So i made it for Linux
